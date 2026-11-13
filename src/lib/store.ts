@@ -170,7 +170,9 @@ export function reducer(state: AppState, action: Action): AppState {
       return {
         ...state,
         jobs: state.jobs.map((j) => (j.id === job.id ? job : j)),
-        cards: action.cards,
+        // 只覆盖本次生成涉及到的候选人，其余岗位的面试卡必须保留。
+        // 这里如果写成 cards: action.cards，会整张表替换掉，其他岗位保存过的面试问题会全部消失。
+        cards: { ...state.cards, ...action.cards },
         removed: undefined,
       }
     }
