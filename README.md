@@ -8,6 +8,9 @@
 
 ![主界面](docs/preview-overview.png)
 
+> **在线演示**：<https://hanny-0303.github.io/interview-bridge/>
+> 静态托管版，没有后端，所以顶栏显示「离线样例 · 静态演示」——点「重新生成」会用预置样例重新组卷，不会调用模型。
+
 ---
 
 ## 一句话说清它在干什么
