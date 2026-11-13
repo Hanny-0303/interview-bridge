@@ -1,22 +1,15 @@
 <div align="center">
-
-# Interview Bridge
-
-**让不懂技术的 HR，也能为一群业务岗位招到对的人。**
-
-把业务主管口中的「要能定位线上故障」，翻译成 HR 问得出、听得懂、判得了的行为问题。
-
-<sub>React 19 · Vite 7 · TypeScript · Tailwind 4 · DeepSeek（可选）</sub>
-
-[**▶ 在线演示**](https://hanny-0303.github.io/interview-bridge/) ·
-[**🎬 32 秒产品片**](docs/media/interview-bridge-intro-v2.mp4) ·
-[三分钟演示脚本](#三分钟演示) ·
-[快速开始](#快速开始)
-
-<br>
-
-<img src="docs/preview-overview.png" width="900" alt="Interview Bridge 主界面">
-
+  <h1>Interview Bridge</h1>
+  <p><b>让不懂技术的 HR，也能为一群业务岗位招到对的人。</b></p>
+  <p>把业务主管口中的「要能定位线上故障」，翻译成 HR 问得出、听得懂、判得了的行为问题。</p>
+  <p><sub>React 19 · Vite 7 · TypeScript · Tailwind 4 · DeepSeek（可选）</sub></p>
+  <p>
+    <a href="https://hanny-0303.github.io/interview-bridge/"><b>▶ 在线演示</b></a> ·
+    <a href="docs/media/interview-bridge-intro-v2.mp4"><b>🎬 32 秒产品片</b></a> ·
+    <a href="#三分钟演示">三分钟演示脚本</a> ·
+    <a href="#快速开始">快速开始</a>
+  </p>
+  <p><img src="docs/preview-overview.png" width="900" alt="Interview Bridge 主界面"></p>
 </div>
 
 > 单页双栏：**左栏是岗位与候选人（JD、简历），右栏是这个人专属的一页面试问题**。中间分界线可以左右拖动。
