@@ -21,7 +21,7 @@ if ! "$NODE_BIN" -e "1" >/dev/null 2>&1 || [ "$("$NODE_BIN" -e "process.arch" 2>
 fi
 
 echo "· 构建"
-"$NODE_BIN" node_modules/vite/bin/vite.js build >/dev/null
+PAGES_BASE=/interview-bridge/ "$NODE_BIN" node_modules/vite/bin/vite.js build >/dev/null
 touch dist/.nojekyll
 
 echo "· 准备 gh-pages 工作区"

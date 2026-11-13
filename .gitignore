@@ -6,3 +6,8 @@ dist
 
 # Pages 部署用工作区
 .pages-worktree/
+
+# Vercel 本地关联信息
+.vercel/
+.vercel
+.env*

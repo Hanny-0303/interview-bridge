@@ -4,7 +4,7 @@
   <p>把业务主管口中的「要能定位线上故障」，翻译成 HR 问得出、听得懂、判得了的行为问题。</p>
   <p><sub>React 19 · Vite 7 · TypeScript · Tailwind 4 · DeepSeek（可选）</sub></p>
   <p>
-    <a href="https://hanny-0303.github.io/interview-bridge/"><b>▶ 在线演示</b></a> ·
+    <a href="https://interview-bridge.vercel.app"><b>▶ 在线演示</b></a> ·
     <a href="docs/media/interview-bridge-intro-v2.mp4"><b>🎬 32 秒产品片</b></a> ·
     <a href="#三分钟演示">三分钟演示脚本</a> ·
     <a href="#快速开始">快速开始</a>
@@ -138,7 +138,18 @@ cp .env.example .env     # 可选：填 DEEPSEEK_API_KEY
 
 打开 <http://localhost:5178>。生产构建 `pnpm build`，首屏 98 kB gzip，PDF / DOCX 解析按需加载。
 
-> **在线演示**用的是静态托管版，没有后端，所以顶栏显示「离线样例 · 静态演示」；点「重新生成」会用预置样例重新组卷，不调用模型。
+### 部署
+
+```bash
+vercel deploy --prod     # 完整版：前端 + Serverless API（api/card.js），线上可真实调用模型
+./deploy.sh              # 静态版：发到 GitHub Pages（/interview-bridge/ 子路径，无后端）
+```
+
+Vercel 上需要配置环境变量 `DEEPSEEK_API_KEY`（Project → Settings → Environment Variables）。
+不配也能跑，只是会退化成预置样例。
+
+> **在线演示** <https://interview-bridge.vercel.app> 是完整版，点「重新生成」会真的调用 deepseek-chat，约 9 秒出 23 道题。
+> 静态备份 <https://hanny-0303.github.io/interview-bridge/> 没有后端，只能看交互。
 
 ---
 
@@ -176,6 +187,9 @@ cp .env.example .env     # 可选：填 DEEPSEEK_API_KEY
 <summary><b>展开文件结构</b></summary>
 
 ```
+api/                           Vercel Serverless：/api/card 与 /api/health
+  _core.js                     提示词 + 引用校验 + 模型调用（本地 server.mjs 复用同一份）
+server.mjs                     本地开发用的零依赖 HTTP 服务
 src/
   App.tsx                        布局 / 分栏拖动 / 状态 / 抽屉
   data/mock.ts                   两个岗位、两位样本、题目模板、通用追问
