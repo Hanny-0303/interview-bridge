@@ -1,0 +1,238 @@
+@import 'tailwindcss';
+
+@theme {
+  --color-ink: #0c1416;
+  --color-muted: #5c6b6f;
+  --color-line: #e2e8e6;
+  --color-paper: #f4f7f6;
+  --color-surface: #ffffff;
+  --color-teal: #0e7c6b;
+  --color-teal-dark: #0a5f53;
+  --color-teal-soft: #e7f5f1;
+  --color-amber: #a96209;
+  --color-amber-soft: #fdf4e4;
+  --color-violet: #5a4fd0;
+  --color-violet-soft: #eeecfb;
+  --color-rose: #c2185b;
+  --font-sans: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Hiragino Sans GB',
+    'Noto Sans SC', 'Microsoft YaHei', system-ui, sans-serif;
+}
+
+/* iOS 式的连续圆角：Chrome 139+ 支持，不支持的浏览器自动退化为普通圆角 */
+@supports (corner-shape: squircle) {
+  .squircle,
+  .card,
+  .btn,
+  .chip,
+  .field,
+  .icon-btn,
+  .drawer-panel {
+    corner-shape: squircle;
+  }
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  color: var(--color-ink);
+  background: var(--color-paper);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: #cdece4;
+}
+
+@layer components {
+  /* 圆角阶梯：16 外层 / 11 内层 / 7 小控件，嵌套时内圈 = 外圈 - 间距 */
+  .card {
+    @apply rounded-[16px] border border-line bg-surface;
+  }
+  .btn {
+    @apply inline-flex h-8 cursor-pointer items-center justify-center gap-1.5 rounded-[11px] px-3 text-[13px] font-medium whitespace-nowrap transition-colors select-none;
+  }
+  .btn:disabled {
+    @apply cursor-not-allowed opacity-45;
+  }
+  .btn-sm {
+    @apply h-7 rounded-[9px] px-2.5 text-[12px];
+  }
+  .btn-primary {
+    @apply bg-teal text-white hover:bg-teal-dark;
+  }
+  .btn-outline {
+    @apply border border-line bg-surface text-ink hover:border-teal/40 hover:bg-teal-soft;
+  }
+  .btn-ghost {
+    @apply text-muted hover:bg-paper hover:text-ink;
+  }
+  .icon-btn {
+    @apply inline-flex h-7 w-7 cursor-pointer items-center justify-center rounded-[9px] text-muted/60 transition-colors hover:bg-paper hover:text-ink;
+  }
+  .icon-btn.on-like {
+    @apply text-rose;
+  }
+  .icon-btn.on-fav {
+    @apply text-amber;
+  }
+  .chip {
+    @apply inline-flex items-center gap-1 rounded-[7px] px-1.5 py-[2px] text-[11px] font-medium whitespace-nowrap;
+  }
+  .field {
+    @apply w-full rounded-[11px] border border-line bg-surface px-2.5 py-1.5 text-[13px] text-ink outline-none transition-colors focus:border-teal/50 focus:ring-2 focus:ring-teal/10;
+  }
+  .label {
+    @apply text-[11.5px] font-semibold tracking-wide text-muted;
+  }
+  .divide-row > * + * {
+    @apply border-t border-line/60;
+  }
+  .section-title {
+    @apply text-[12.5px] font-semibold text-ink;
+  }
+  .micro {
+    @apply text-[11px] text-muted/70;
+  }
+}
+
+/* 简历高亮：和被追问的问题同一个紫色，一眼对应 */
+mark.claim {
+  @apply cursor-pointer rounded-[4px] bg-[#e6e2fb] px-0.5 text-ink;
+  box-shadow: inset 0 -2px 0 #b9b0f2;
+  transition: background-color 0.15s;
+}
+mark.claim:hover {
+  @apply bg-[#d8d2f8];
+}
+mark.claim.active {
+  background: #cbc4f6;
+  box-shadow: inset 0 -2px 0 var(--color-violet);
+}
+
+@keyframes flash-ring {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(90, 79, 208, 0);
+  }
+  25%,
+  75% {
+    box-shadow: 0 0 0 3px rgba(90, 79, 208, 0.22);
+  }
+}
+.flash {
+  animation: flash-ring 1.4s ease-in-out;
+  border-radius: 10px;
+}
+
+@keyframes slide-in {
+  from {
+    transform: translateX(24px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+.slide-in {
+  animation: slide-in 0.22s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+@keyframes rise {
+  from {
+    transform: translateY(8px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+.rise {
+  animation: rise 0.2s ease-out;
+}
+
+/* 点击喜欢/收藏时的爆散 */
+@keyframes burst-out {
+  0% {
+    transform: translate(-50%, -50%) scale(0.4);
+    opacity: 1;
+  }
+  70% {
+    opacity: 0.9;
+  }
+  100% {
+    transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) scale(1);
+    opacity: 0;
+  }
+}
+.burst-dot {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: var(--size);
+  height: var(--size);
+  border-radius: 999px;
+  background: var(--color);
+  animation: burst-out 0.62s cubic-bezier(0.16, 0.8, 0.3, 1) forwards;
+}
+
+@keyframes ring-out {
+  0% {
+    transform: translate(-50%, -50%) scale(0.3);
+    opacity: 0.55;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1.9);
+    opacity: 0;
+  }
+}
+.burst-ring {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 26px;
+  height: 26px;
+  border-radius: 999px;
+  border: 2px solid var(--color);
+  animation: ring-out 0.5s ease-out forwards;
+}
+
+/* 题目拖拽 */
+.drag-above {
+  box-shadow: inset 0 2px 0 var(--color-teal);
+}
+.drag-below {
+  box-shadow: inset 0 -2px 0 var(--color-teal);
+}
+.dragging {
+  opacity: 0.45;
+}
+
+/* 细滚动条 */
+.thin::-webkit-scrollbar {
+  width: 9px;
+  height: 9px;
+}
+.thin::-webkit-scrollbar-thumb {
+  background: #cfd8d5;
+  border-radius: 9px;
+  border: 3px solid transparent;
+  background-clip: content-box;
+}
+.thin::-webkit-scrollbar-thumb:hover {
+  background: #b6c3bf;
+  background-clip: content-box;
+  border: 3px solid transparent;
+}
+.thin::-webkit-scrollbar-track {
+  background: transparent;
+}
