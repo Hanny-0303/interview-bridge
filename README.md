@@ -39,7 +39,7 @@
 
 32 秒，像素办公室风格。片子讲的是上面那条链路断在哪、又怎么接上：
 
-https://github.com/user-attachments/assets/ae5c27be-1258-42f8-b9f7-6503edef91aa
+https://github.com/user-attachments/assets/63152746-56cd-4b76-8ec0-f492046c64f3
 
 <sub>720p 内嵌版，点右下角可全屏 · 1080p 原片：<a href="docs/media/interview-bridge-intro.mp4">下载</a>（18 MB）</sub>
 
