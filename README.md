@@ -36,15 +36,11 @@
 
 ## 先看片（第二版）
 
-32 秒，1920×1080，像素办公室风格。片子讲的是上面那条链路断在哪、又怎么接上：
+32 秒，像素办公室风格。片子讲的是上面那条链路断在哪、又怎么接上：
 
-[![产品前导片](docs/media/intro-v2-poster.jpg)](docs/media/interview-bridge-intro-v2.mp4)
+https://github.com/user-attachments/assets/ae5c27be-1258-42f8-b9f7-6503edef91aa
 
-<sub>点海报播放完整视频（18 MB），或直接下载 [interview-bridge-intro-v2.mp4](docs/media/interview-bridge-intro-v2.mp4)。</sub>
-
-<img src="docs/media/intro-v2-preview.gif" width="720" alt="产品界面片段">
-
-<sub>片段：产品界面三块能力——岗位需求对齐 / 候选人经历映射 / 面试作战卡。</sub>
+<sub>720p 内嵌版，点右下角可全屏 · 完整 1080p 原片：<a href="docs/media/interview-bridge-intro-v2.mp4">下载</a>（18 MB）</sub>
 
 ---
 
