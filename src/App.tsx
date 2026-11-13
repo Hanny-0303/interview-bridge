@@ -254,6 +254,7 @@ export default function App() {
   }
 
   const openCount = job.issues.filter((i) => i.status === 'open').length
+  const isStaticHost = typeof window !== 'undefined' && /github\.io$/.test(window.location.hostname)
 
   return (
     <div className="flex h-full flex-col overflow-hidden">
@@ -302,7 +303,13 @@ export default function App() {
         <div className="ml-auto flex shrink-0 items-center gap-1.5">
           <span
             className="chip border border-line bg-paper px-2 py-[3px] text-[11.5px] text-muted"
-            title={api?.configured ? '重新生成会真实调用大模型' : '未配置模型密钥，使用预置样例'}
+            title={
+              api?.configured
+                ? '重新生成会真实调用大模型'
+                : isStaticHost
+                  ? 'GitHub Pages 只托管前端，没有模型服务；点「重新生成」会用预置样例重新组卷'
+                  : '未配置模型密钥，使用预置样例'
+            }
           >
             <span
               className={`h-1.5 w-1.5 rounded-full ${
@@ -310,6 +317,7 @@ export default function App() {
               }`}
             />
             {api === null ? '检测中' : api.configured ? 'AI 已连接' : '离线样例'}
+            {isStaticHost && api?.configured === false ? ' · 静态演示' : ''}
           </span>
           <button className="btn btn-ghost" onClick={() => setProfileOpen(true)}>
             <IconBookmark width={15} height={15} />

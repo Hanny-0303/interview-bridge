@@ -3,3 +3,6 @@ dist
 .env
 .pnpm-store
 .DS_Store
+
+# Pages 部署用工作区
+.pages-worktree/

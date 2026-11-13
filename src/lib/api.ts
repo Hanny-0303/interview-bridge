@@ -55,9 +55,10 @@ export async function requestCard(job: JobProfile, candidate: Candidate): Promis
 export async function pingApi(): Promise<{ configured: boolean; model?: string } | null> {
   try {
     const res = await fetch('/api/health')
-    if (!res.ok) return null
+    if (!res.ok) return { configured: false }
     return (await res.json()) as { configured: boolean; model?: string }
   } catch {
-    return null
+    // 静态托管（GitHub Pages）没有后端，直接当作离线样例，而不是一直显示「检测中」
+    return { configured: false }
   }
 }
