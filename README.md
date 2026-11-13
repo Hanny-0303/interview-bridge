@@ -5,11 +5,12 @@
   <p><sub>React 19 · Vite 7 · TypeScript · Tailwind 4 · DeepSeek（可选）</sub></p>
   <p>
     <a href="https://interview-bridge.vercel.app"><b>▶ 在线演示</b></a> ·
-    <a href="docs/media/interview-bridge-intro-v2.mp4"><b>🎬 32 秒产品片</b></a> ·
+    <a href="#先看片"><b>🎬 32 秒产品片</b></a> ·
     <a href="#三分钟演示">三分钟演示脚本</a> ·
-    <a href="#快速开始">快速开始</a>
+    <a href="#快速开始">本地跑起来</a>
   </p>
   <p><img src="docs/preview-overview.png" width="900" alt="Interview Bridge 主界面"></p>
+  <p><sub><b>10</b> 个岗位 · <b>2</b> 位候选人 · <b>23</b> 道题 / 8.5 秒 · 首屏 <b>98 kB</b> gzip</sub></p>
 </div>
 
 > 单页双栏：**左栏是岗位与候选人（JD、简历），右栏是这个人专属的一页面试问题**。中间分界线可以左右拖动。
@@ -34,13 +35,13 @@
 
 ---
 
-## 先看片（第二版）
+## 先看片
 
 32 秒，像素办公室风格。片子讲的是上面那条链路断在哪、又怎么接上：
 
 https://github.com/user-attachments/assets/ae5c27be-1258-42f8-b9f7-6503edef91aa
 
-<sub>720p 内嵌版，点右下角可全屏 · 完整 1080p 原片：<a href="docs/media/interview-bridge-intro-v2.mp4">下载</a>（18 MB）</sub>
+<sub>720p 内嵌版，点右下角可全屏 · 1080p 原片：<a href="docs/media/interview-bridge-intro.mp4">下载</a>（18 MB）</sub>
 
 ---
 
@@ -49,7 +50,7 @@ https://github.com/user-attachments/assets/ae5c27be-1258-42f8-b9f7-6503edef91aa
 产品的数据模型只有三层，所有交互都挂在这上面：
 
 ```
-岗位（JD + 版本 + 收藏）
+岗位（JD + 改动记录 + 收藏）
   └── 候选人（简历 + 线索）
         └── 面试问题（提前生成、可保存的一份）
 ```
@@ -100,10 +101,12 @@ HR 不需要知道答案，只需要判断对方能不能讲清楚。讲不清�
 ## 模型接在哪
 
 ```
-浏览器 ──POST /api/card──▶ server.mjs(:8787) ──▶ api.deepseek.com
+浏览器 ──POST /api/card──▶ /api/health · /api/card ──▶ api.deepseek.com
                               │
                               └─ 引用校验：不过的直接丢掉
 ```
+
+同一套逻辑跑了两个壳：本地是零依赖的 `server.mjs`（:8787），线上是 Vercel Serverless（`api/`）。
 
 - 密钥只在服务端，`.env` 已进 `.gitignore`
 - 没配密钥也能完整演示：走预置样例，标注「预置样例 · 模型不可用」
@@ -119,7 +122,7 @@ HR 不需要知道答案，只需要判断对方能不能讲清楚。讲不清�
 - 林嘉睿拿到：`最近一次线上出问题，你当时在做什么？`
 - 周沐拿到：`你最近一次线上出问题是什么时候？你当时做了什么？`
 
-不处理，「同岗位问同一道题」就只是口号。`lib/canonical.ts` 在每个 `能力 × 题型` 上只保留第一个出现的版本，其余全部覆盖，模型漏掉的还会补齐。
+不处理，「同岗位问同一道题」就只是口号。`lib/canonical.ts` 在每个 `能力 × 题型` 上只保留第一个出现的说法，其余全部覆盖，模型漏掉的还会补齐。
 
 > 这是**保证**，不是美化——必问题的一致性由代码兜底，不指望模型自觉。
 
@@ -130,6 +133,7 @@ HR 不需要知道答案，只需要判断对方能不能讲清楚。讲不清�
 ```bash
 cp .env.example .env     # 可选：填 DEEPSEEK_API_KEY
 ./dev.sh                 # 前端 5178 + 模型服务 8787
+curl 127.0.0.1:8787/api/health   # {"ok":true,"configured":false} —— 没配 key 也能起
 ```
 
 打开 <http://localhost:5178>。生产构建 `pnpm build`，首屏 98 kB gzip，PDF / DOCX 解析按需加载。
@@ -137,15 +141,14 @@ cp .env.example .env     # 可选：填 DEEPSEEK_API_KEY
 ### 部署
 
 ```bash
-vercel deploy --prod     # 完整版：前端 + Serverless API（api/card.js），线上可真实调用模型
+vercel deploy --prod     # 完整版：前端 + Serverless API，线上可真实调用模型
 ./deploy.sh              # 静态版：发到 GitHub Pages（/interview-bridge/ 子路径，无后端）
 ```
 
-Vercel 上需要配置环境变量 `DEEPSEEK_API_KEY`（Project → Settings → Environment Variables）。
-不配也能跑，只是会退化成预置样例。
+Vercel 上配置 `DEEPSEEK_API_KEY`（Project → Settings → Environment Variables）；不配也能跑，只是退化成预置样例。
 
-> **在线演示** <https://interview-bridge.vercel.app> 是完整版，点「重新生成」会真的调用 deepseek-chat，约 9 秒出 23 道题。
-> 静态备份 <https://hanny-0303.github.io/interview-bridge/> 没有后端，只能看交互。
+> 线上两份：**完整版** <https://interview-bridge.vercel.app> 点「重新生成」会真的调用 deepseek-chat；
+> **静态备份** <https://hanny-0303.github.io/interview-bridge/> 没有后端，只能看交互。
 
 ---
 
@@ -160,7 +163,7 @@ Vercel 上需要配置环境变量 `DEEPSEEK_API_KEY`（Project → Settings →
 点开顶栏岗位：两个岗位摆着，AI Agent 那个被收藏置顶。切到「数据分析师」，是另一个岗位的空状态；切回来，林嘉睿、周沐都在。**JD 存得住，面试才接得上。**
 
 **第二幕 · 改 JD（35 秒）**
-左栏 JD 末尾三条淡色「新增」——主管口头说的，HR 自己敲进去的。点「直接改 JD」，再加一条「有过线上值班经验」，保存。标题变 v3，右栏黄条提示「JD 已更新，这份问题还是 v2」。
+左栏 JD 末尾三条淡色「新增」——主管口头说的，HR 自己敲进去的。点「直接改 JD」，再加一条「有过线上值班经验」，保存。JD 标记为已更新，右栏黄条提示「JD 已更新，这份问题还是保存时那份」。
 
 **第三幕 · 上传（40 秒）**
 上传一份 PDF 简历。原文铺开、句子高亮、线索列表冒出来。右边已经是一页 12 道题：必问题、简历追问、假设题。
@@ -177,15 +180,15 @@ Vercel 上需要配置环境变量 `DEEPSEEK_API_KEY`（Project → Settings →
 
 ---
 
-## 目录
+## 代码结构
 
 <details>
-<summary><b>展开文件结构</b></summary>
+<summary><b>展开文件说明</b></summary>
 
 ```
 api/                           Vercel Serverless：/api/card 与 /api/health
   _core.js                     提示词 + 引用校验 + 模型调用（本地 server.mjs 复用同一份）
-server.mjs                     本地开发用的零依赖 HTTP 服务
+server.mjs                     本地开发用的零依赖 HTTP 服务（:8787）
 src/
   App.tsx                        布局 / 分栏拖动 / 状态 / 抽屉
   data/mock.ts                   两个岗位、两位样本、题目模板、通用追问
@@ -193,7 +196,7 @@ src/
   lib/resume.ts                  PDF/DOCX/TXT 解析 + 规则线索抽取
   lib/store.ts                   reducer：岗位切换、改 JD、保存面试卡、收藏
   lib/api.ts                     调用 /api/card，失败自动降级
-  lib/state.ts                   localStorage（带结构版本号，旧数据自动丢弃）
+  lib/state.ts                   localStorage（带结构标记，旧数据自动丢弃）
   lib/canonical.ts               跨候选人把必问题 / 假设题对齐成同一句
   components/JobSwitcher.tsx     岗位库下拉
   components/LeftPanel.tsx       JD（可拖高、标新增）+ 候选人 + 简历 + 线索
@@ -204,8 +207,7 @@ src/
   components/StandardPanel.tsx   能力维度与 JD 待确认项
   components/EvidenceDrawer.tsx  四级证据链
   components/LibraryDrawer.tsx   题库（跨候选人复用）
-server.mjs                       模型服务：HR 面提示词 + 引用校验
-docs/media/                      产品前导片（第二版）、海报、动图
+docs/media/                      产品前导片原片（1080p）
 ```
 
 </details>
@@ -227,7 +229,7 @@ docs/media/                      产品前导片（第二版）、海报、动�
 
 <div align="center">
 <sub>一个人的招聘工具 · 所有数据均为虚构演示<br>
-<a href="https://hanny-0303.github.io/interview-bridge/">在线演示</a> ·
-<a href="docs/media/interview-bridge-intro-v2.mp4">产品片</a> ·
+<a href="https://interview-bridge.vercel.app">在线演示</a> ·
+<a href="docs/media/interview-bridge-intro.mp4">产品片</a> ·
 <a href="https://github.com/Hanny-0303/interview-bridge/issues">提 Issue</a></sub>
 </div>
