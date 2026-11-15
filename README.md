@@ -140,6 +140,8 @@ curl 127.0.0.1:8787/api/health   # {"ok":true,"configured":false} —— 没配 
 
 ### 部署
 
+> 在中国大陆访问 → 见 [DEPLOY-CN.md](DEPLOY-CN.md)（香港轻量服务器，免备案，一个进程跑起页面 + 接口）
+
 ```bash
 vercel deploy --prod     # 完整版：前端 + Serverless API，线上可真实调用模型
 ./deploy.sh              # 静态版：发到 GitHub Pages（/interview-bridge/ 子路径，无后端）

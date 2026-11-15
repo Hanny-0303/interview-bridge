@@ -1,0 +1,6 @@
+# 装了 Caddy 之后，把域名换成你的，放到 /etc/caddy/Caddyfile
+# Caddy 会自动申请并续期 HTTPS 证书，不用再配 certbot
+
+interview.example.com {
+    reverse_proxy 127.0.0.1:8787
+}
